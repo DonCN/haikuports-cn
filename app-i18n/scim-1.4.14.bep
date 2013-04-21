@@ -1,0 +1,20 @@
+DESCRIPTION="The Smart Common Input Method platform (SCIM) is an input method (IM) platform containing support for more than thirty languages (CJK and many European languages) for POSIX-style operating systems including Linux and BSD." 
+HOMEPAGE="http://www.scim-im.org/" 
+SRC_URI="http://sourceforge.net/projects/scim/files/scim/1.4.14/scim-1.4.14.tar.gz"
+CHECKSUM_MD5="495fbd080d9d6189e7eb67fd61097324"
+REVISION="1"
+STATUS_HAIKU="stable"
+DEPEND=""
+BUILD {
+	cd scim-1.4.14
+	./bootstrap
+	./configure --prefix=`finddir B_COMMON_DIRECTORY`
+	make
+}
+
+INSTALL {
+	cd scim-1.4.14
+	make install
+}
+LICENSE="GNU LGPL v2.1"
+COPYRIGHT="2002-2005 James Su <suzhe@tsinghua.org.cn>"

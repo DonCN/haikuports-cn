@@ -1,0 +1,115 @@
+diff -Naur scim-1.4.14/configure.ac scim-1.4.14-haiku/configure.ac
+--- scim-1.4.14/configure.ac	2012-06-22 08:57:57.043515904 +0000
++++ scim-1.4.14-haiku/configure.ac	2013-04-21 22:37:51.678428672 +0000
+@@ -79,7 +79,7 @@
+ 
+ # Init automake stuff
+ AM_INIT_AUTOMAKE
+-AM_CONFIG_HEADER([config.h])
++AC_CONFIG_HEADERS([config.h])
+ 
+ # Init libtool
+ LT_CONFIG_LTDL_DIR([libltdl])
+@@ -231,102 +231,6 @@
+ 
+ AM_ICONV
+ 
+-PKG_PROG_PKG_CONFIG
+-
+-# Check if we should build scim-panel-gtk daemon
+-PKG_CHECK_MODULES(GTK2, [gtk+-2.0 >= 2.4.0 pango >= 1.1.0 gdk-pixbuf-2.0 >= 2.4.0],
+-			[SCIM_HAS_GTK2=yes],
+-			[SCIM_HAS_GTK2=no])
+-
+-PKG_CHECK_MODULES(GTK3, [gtk+-3.0 >= 3.0.0 pango >= 1.1.0 gdk-pixbuf-2.0 >= 2.4.0],
+-			[SCIM_HAS_GTK3=yes],
+-			[SCIM_HAS_GTK3=no])
+-
+-SCIM_HAS_GTK2_2=no
+-if test "$SCIM_HAS_GTK2" = "yes"; then
+-  if $PKG_CONFIG --exists "gtk+-2.0 >= 2.2" ; then
+-    AC_DEFINE(GDK_MULTIHEAD_SAFE,1,[Force use of GDK's multihead-safe APIs.])
+-  fi
+-  GTK2_BINARY_VERSION=`$PKG_CONFIG --variable=gtk_binary_version gtk+-2.0`
+-  GTK2_LIBDIR=`$PKG_CONFIG --variable=libdir gtk+-2.0`
+-  GTK2_IM_MODULEDIR=$GTK2_LIBDIR/gtk-2.0/$GTK2_BINARY_VERSION/immodules
+-  AC_SUBST(GTK2_IM_MODULEDIR)
+-fi
+-
+-if test "$SCIM_HAS_GTK3" = "yes"; then
+-  GTK3_VERSION=3.0.0
+-  GTK3_BINARY_VERSION=`$PKG_CONFIG --variable=gtk_binary_version gtk+-3.0`
+-  GTK3_LIBDIR=`$PKG_CONFIG --variable=libdir gtk+-3.0`
+-  GTK3_IM_MODULEDIR=$GTK3_LIBDIR/gtk-3.0/$GTK3_BINARY_VERSION/immodules
+-  AC_SUBST(GTK3_IM_MODULEDIR)
+-fi
+-
+-# Check if we have gthread
+-PKG_CHECK_MODULES(GTHREAD2,[gthread-2.0 >= 2.0.0],
+-			[SCIM_HAS_GTHREAD2=yes],
+-			[SCIM_HAS_GTHREAD2=no])
+-
+-
+-# Check if we should build scim-bridge-qt-immodule
+-PKG_CHECK_MODULES(QT3, [qt-mt >= 3.3],
+-            [SCIM_HAS_QT3=yes],
+-            [SCIM_HAS_QT3=no])
+-
+-if test "$SCIM_HAS_QT3" = "yes"; then
+-  if test -z "$QT3_PREFIX"; then
+-    QT3_PREFIX=`$PKG_CONFIG --variable=prefix qt-mt`
+-    QT3_LIBDIR=`$PKG_CONFIG --variable=libdir qt-mt`
+-  fi
+-  QT3_MOC=$QT3_PREFIX/bin/moc
+-  QT3_IM_MODULEDIR=$QT3_LIBDIR/qt3/plugins/inputmethods
+-  AC_SUBST(QT3_MOC)
+-  AC_SUBST(QT3_IM_MODULEDIR)
+-  AC_SUBST(QT3_PREFIX)
+-  AC_SUBST(QT3_LIBDIR)
+-fi
+-
+-PKG_CHECK_MODULES(QT4, [QtGui >= 4.0, QtCore >= 4.0],
+-            [SCIM_HAS_QT4=yes],
+-            [SCIM_HAS_QT4=no])
+-
+-if test "$SCIM_HAS_QT4" = "yes"; then
+-  if test -z "$QT4_PREFIX"; then
+-    QT4_PREFIX=`$PKG_CONFIG --variable=prefix QtCore`
+-    QT4_LIBDIR=`$PKG_CONFIG --variable=libdir QtCore`
+-  fi
+-  QT4_MOC=$QT4_PREFIX/bin/moc
+-  QT4_IM_MODULEDIR=$QT4_LIBDIR/qt4/plugins/inputmethods
+-  AC_SUBST(QT4_MOC)
+-  AC_SUBST(QT4_IM_MODULEDIR)
+-  AC_SUBST(QT4_PREFIX)
+-  AC_SUBST(QT4_LIBDIR)
+-fi
+-
+-# Check if we should build scim-bridge-clutter-immodule
+-PKG_CHECK_MODULES(CLUTTER, clutter-1.0 clutter-imcontext-0.1,
+-           [SCIM_HAS_CLUTTER=yes],
+-           [SCIM_HAS_CLUTTER=no])
+-
+-if test "$SCIM_HAS_CLUTTER" = "yes"; then
+-  CLUTTER_IMCONTEXT_LIBDIR=`$PKG_CONFIG --variable=libdir clutter-imcontext-0.1`
+-  CLUTTER_IM_MODULEDIR=$CLUTTER_IMCONTEXT_LIBDIR/clutter-imcontext/immodules
+-  AC_SUBST(CLUTTER_IM_MODULEDIR)
+-  AC_SUBST(CLUTTER_LIBDIR)
+-  AC_SUBST(CLUTTER_VERSION)
+-  AC_SUBST(CLUTTER_BINARY_VERSION)
+-  AC_SUBST(CLUTTER_IMCONTEXT_LIBDIR)
+-  enable_clutter_immodule="yes";
+-fi
+-
+-
+-# Checks for X11 header files.
+-AC_PATH_XTRA
+-
+-# Add -lX11 to X_LIBS
+-if test "$have_x" = "yes"; then
+-  X_LIBS="$X_LIBS -lX11"
+-fi
+-
+ ###########################################################
+ ##             Definiation of compile args.              ##
+ ###########################################################
