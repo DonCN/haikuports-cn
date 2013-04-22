@@ -9,6 +9,10 @@ BUILD {
 	cd scim-1.4.14
 	./bootstrap
 	./configure --prefix=`finddir B_COMMON_DIRECTORY`
+	cd libltdl
+	./configure --prefix=`finddir B_COMMON_DIRECTORY`
+	make 
+	cd ../
 	make
 }
 
