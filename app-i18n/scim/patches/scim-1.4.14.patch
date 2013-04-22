@@ -1,6 +1,6 @@
 diff -Naur scim-1.4.14/configure.ac scim-1.4.14-haiku/configure.ac
 --- scim-1.4.14/configure.ac	2012-06-22 08:57:57.043515904 +0000
-+++ scim-1.4.14-haiku/configure.ac	2013-04-22 00:59:18.465829888 +0000
++++ scim-1.4.14-haiku/configure.ac	2013-04-22 02:13:46.487325696 +0000
 @@ -79,7 +79,7 @@
  
  # Init automake stuff
@@ -10,11 +10,12 @@ diff -Naur scim-1.4.14/configure.ac scim-1.4.14-haiku/configure.ac
  
  # Init libtool
  LT_CONFIG_LTDL_DIR([libltdl])
-@@ -229,104 +229,9 @@
+@@ -229,104 +229,10 @@
  	       [socket_ok=yes],
  	       [socket_ok=no])
  
-+AC_SEARCH_LIBS(socket, socket bsd network)
++AC_SEARCH_LIBS(socket, socket network)
++AC_SEARCH_LIBS(daemon, [bsd])
  AM_ICONV
  
 -PKG_PROG_PKG_CONFIG
