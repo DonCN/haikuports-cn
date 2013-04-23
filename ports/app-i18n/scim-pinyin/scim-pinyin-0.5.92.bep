@@ -1,4 +1,4 @@
-DESCRIPTION="Smart Common Input Method (SCIM) Smart Pinyin Input Method." 
+DESCRIPTION="Smart Pinyin IMEngine for Smart Common Input Method platform." 
 HOMEPAGE="http://www.scim-im.org/" 
 SRC_URI="http://sourceforge.net/projects/scim/files/scim-pinyin/0.5.92/scim-pinyin-0.5.92.tar.gz"
 CHECKSUM_MD5="71ab727af0d37eabfa17aa45be2ead1e"
