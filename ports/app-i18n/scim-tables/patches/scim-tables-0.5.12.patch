@@ -1,0 +1,178 @@
+diff -Naur scim-tables-0.5.12/aclocal.m4 scim-tables-0.5.12-haiku/aclocal.m4
+--- scim-tables-0.5.12/aclocal.m4	2012-10-10 07:07:48.007077888 +0000
++++ scim-tables-0.5.12-haiku/aclocal.m4	2013-04-23 13:10:45.818937856 +0000
+@@ -11056,7 +11056,6 @@
+ ])
+ 
+ # pkg.m4 - Macros to locate and utilise pkg-config.            -*- Autoconf -*-
+-# serial 1 (pkg-config-0.24)
+ # 
+ # Copyright © 2004 Scott James Remnant <scott@netsplit.com>.
+ #
+@@ -11083,12 +11082,8 @@
+ # ----------------------------------
+ AC_DEFUN([PKG_PROG_PKG_CONFIG],
+ [m4_pattern_forbid([^_?PKG_[A-Z_]+$])
+-m4_pattern_allow([^PKG_CONFIG(_(PATH|LIBDIR|SYSROOT_DIR|ALLOW_SYSTEM_(CFLAGS|LIBS)))?$])
+-m4_pattern_allow([^PKG_CONFIG_(DISABLE_UNINSTALLED|TOP_BUILD_DIR|DEBUG_SPEW)$])
+-AC_ARG_VAR([PKG_CONFIG], [path to pkg-config utility])
+-AC_ARG_VAR([PKG_CONFIG_PATH], [directories to add to pkg-config's search path])
+-AC_ARG_VAR([PKG_CONFIG_LIBDIR], [path overriding pkg-config's built-in search path])
+-
++m4_pattern_allow([^PKG_CONFIG(_PATH)?$])
++AC_ARG_VAR([PKG_CONFIG], [path to pkg-config utility])dnl
+ if test "x$ac_cv_env_PKG_CONFIG_set" != "xset"; then
+ 	AC_PATH_TOOL([PKG_CONFIG], [pkg-config])
+ fi
+@@ -11101,6 +11096,7 @@
+ 		AC_MSG_RESULT([no])
+ 		PKG_CONFIG=""
+ 	fi
++		
+ fi[]dnl
+ ])# PKG_PROG_PKG_CONFIG
+ 
+@@ -11109,20 +11105,21 @@
+ # Check to see whether a particular set of modules exists.  Similar
+ # to PKG_CHECK_MODULES(), but does not set variables or print errors.
+ #
+-# Please remember that m4 expands AC_REQUIRE([PKG_PROG_PKG_CONFIG])
+-# only at the first occurence in configure.ac, so if the first place
+-# it's called might be skipped (such as if it is within an "if", you
+-# have to call PKG_CHECK_EXISTS manually
++#
++# Similar to PKG_CHECK_MODULES, make sure that the first instance of
++# this or PKG_CHECK_MODULES is called, or make sure to call
++# PKG_CHECK_EXISTS manually
+ # --------------------------------------------------------------
+ AC_DEFUN([PKG_CHECK_EXISTS],
+ [AC_REQUIRE([PKG_PROG_PKG_CONFIG])dnl
+ if test -n "$PKG_CONFIG" && \
+     AC_RUN_LOG([$PKG_CONFIG --exists --print-errors "$1"]); then
+-  m4_default([$2], [:])
++  m4_ifval([$2], [$2], [:])
+ m4_ifvaln([$3], [else
+   $3])dnl
+ fi])
+ 
++
+ # _PKG_CONFIG([VARIABLE], [COMMAND], [MODULES])
+ # ---------------------------------------------
+ m4_define([_PKG_CONFIG],
+@@ -11130,8 +11127,7 @@
+     pkg_cv_[]$1="$$1"
+  elif test -n "$PKG_CONFIG"; then
+     PKG_CHECK_EXISTS([$3],
+-                     [pkg_cv_[]$1=`$PKG_CONFIG --[]$2 "$3" 2>/dev/null`
+-		      test "x$?" != "x0" && pkg_failed=yes ],
++                     [pkg_cv_[]$1=`$PKG_CONFIG --[]$2 "$3" 2>/dev/null`],
+ 		     [pkg_failed=yes])
+  else
+     pkg_failed=untried
+@@ -11176,17 +11172,16 @@
+ See the pkg-config man page for more details.])
+ 
+ if test $pkg_failed = yes; then
+-   	AC_MSG_RESULT([no])
+         _PKG_SHORT_ERRORS_SUPPORTED
+         if test $_pkg_short_errors_supported = yes; then
+-	        $1[]_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "$2" 2>&1`
++	        $1[]_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors "$2" 2>&1`
+         else 
+-	        $1[]_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "$2" 2>&1`
++	        $1[]_PKG_ERRORS=`$PKG_CONFIG --print-errors "$2" 2>&1`
+         fi
+ 	# Put the nasty error message in config.log where it belongs
+ 	echo "$$1[]_PKG_ERRORS" >&AS_MESSAGE_LOG_FD
+ 
+-	m4_default([$4], [AC_MSG_ERROR(
++	ifelse([$4], , [AC_MSG_ERROR(dnl
+ [Package requirements ($2) were not met:
+ 
+ $$1_PKG_ERRORS
+@@ -11194,27 +11189,29 @@
+ Consider adjusting the PKG_CONFIG_PATH environment variable if you
+ installed software in a non-standard prefix.
+ 
+-_PKG_TEXT])[]dnl
+-        ])
++_PKG_TEXT
++])],
++		[AC_MSG_RESULT([no])
++                $4])
+ elif test $pkg_failed = untried; then
+-     	AC_MSG_RESULT([no])
+-	m4_default([$4], [AC_MSG_FAILURE(
++	ifelse([$4], , [AC_MSG_FAILURE(dnl
+ [The pkg-config script could not be found or is too old.  Make sure it
+ is in your PATH or set the PKG_CONFIG environment variable to the full
+ path to pkg-config.
+ 
+ _PKG_TEXT
+ 
+-To get pkg-config, see <http://pkg-config.freedesktop.org/>.])[]dnl
+-        ])
++To get pkg-config, see <http://pkg-config.freedesktop.org/>.])],
++		[$4])
+ else
+ 	$1[]_CFLAGS=$pkg_cv_[]$1[]_CFLAGS
+ 	$1[]_LIBS=$pkg_cv_[]$1[]_LIBS
+         AC_MSG_RESULT([yes])
+-	$3
++	ifelse([$3], , :, [$3])
+ fi[]dnl
+ ])# PKG_CHECK_MODULES
+ 
++
+ # po.m4 serial 17 (gettext-0.18)
+ dnl Copyright (C) 1995-2010 Free Software Foundation, Inc.
+ dnl This file is free software; the Free Software Foundation
+diff -Naur scim-tables-0.5.12/configure.ac scim-tables-0.5.12-haiku/configure.ac
+--- scim-tables-0.5.12/configure.ac	2012-10-10 07:05:28.006029312 +0000
++++ scim-tables-0.5.12-haiku/configure.ac	2013-04-23 13:20:47.322961408 +0000
+@@ -7,7 +7,7 @@
+ 
+ # Init automake stuff
+ AM_INIT_AUTOMAKE
+-AM_CONFIG_HEADER([config.h])
++AC_CONFIG_HEADERS([config.h])
+ 
+ # Init gettext
+ AM_GNU_GETTEXT([external])
+@@ -16,7 +16,7 @@
+ GETTEXT_PACKAGE=scim-tables
+ AC_SUBST(GETTEXT_PACKAGE)
+ AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE,"$GETTEXT_PACKAGE", [The gettext domain])
+-AM_GLIB_GNU_GETTEXT
++#AM_GLIB_GNU_GETTEXT
+ 
+ # Init libtool
+ AC_LIBTOOL_DLOPEN
+diff -Naur scim-tables-0.5.12/Makefile.am scim-tables-0.5.12-haiku/Makefile.am
+--- scim-tables-0.5.12/Makefile.am	2012-09-19 04:32:48.006291456 +0000
++++ scim-tables-0.5.12-haiku/Makefile.am	2013-04-23 21:53:08.615514112 +0000
+@@ -15,6 +15,7 @@
+ ## along with this program; if not, write to the Free Software
+ ## Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ 
++## @start 1
+ AUX_DIST                = $(ac_aux_dir)/config.guess \
+ 			$(ac_aux_dir)/config.sub \
+ 			$(ac_aux_dir)/install-sh \
+@@ -24,6 +25,8 @@
+ 			$(ac_aux_dir)/mkinstalldirs
+ EXTRA_DIST		= config.rpath mkinstalldirs  bootstrap scim-tables.spec
+ 
++## @end 1
++
+ AUTOMAKE_OPTIONS 	= gnu
+ 
+ if SCIM_TABLES_ENABLE_SKIM_SUPPORT
+@@ -32,6 +35,7 @@
+ 
+ SUBDIRS 		= docs icons po src tables # $(SKIM_SUBDIR)
+ 
++## @start 1
+ MAINTAINERCLEANFILES 	= Makefile.in aclocal.m4 configure $(AUX_DIST)
+ 
+ CLEANFILES		= *.bak 

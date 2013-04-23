@@ -1,0 +1,20 @@
+DESCRIPTION="SCIM Generic Table IMEngine and its data files." 
+HOMEPAGE="http://www.scim-im.org/" 
+SRC_URI="http://sourceforge.net/projects/scim/files/scim-tables/0.5.12/scim-tables-0.5.12.tar.gz"
+CHECKSUM_MD5="0b5d25fee5bcbfe35159d1bb061c8911"
+REVISION="1"
+STATUS_HAIKU="stable"
+DEPEND=""
+BUILD {
+	cd scim-tables-0.5.12
+	./bootstrap	
+	./configure --prefix=`finddir B_COMMON_DIRECTORY`
+	make
+}
+
+INSTALL {
+	cd scim-tables-0.5.12
+	make install
+}
+LICENSE="GNU LGPL v2.1"
+COPYRIGHT="2002-2005 James Su <suzhe@tsinghua.org.cn>"
