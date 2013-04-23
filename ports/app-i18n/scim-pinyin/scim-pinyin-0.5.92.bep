@@ -1,0 +1,20 @@
+DESCRIPTION="Smart Common Input Method (SCIM) Smart Pinyin Input Method." 
+HOMEPAGE="http://www.scim-im.org/" 
+SRC_URI="http://sourceforge.net/projects/scim/files/scim-pinyin/0.5.92/scim-pinyin-0.5.92.tar.gz"
+CHECKSUM_MD5="71ab727af0d37eabfa17aa45be2ead1e"
+REVISION="1"
+STATUS_HAIKU="stable"
+DEPEND=""
+BUILD {
+	cd scim-pinyin-0.5.92
+	./bootstrap	
+	./configure --prefix=`finddir B_COMMON_DIRECTORY`
+	make
+}
+
+INSTALL {
+	cd scim-pinyin-0.5.92
+	make install
+}
+LICENSE="GNU LGPL v2.1"
+COPYRIGHT="2002-2005 James Su <suzhe@tsinghua.org.cn>"
