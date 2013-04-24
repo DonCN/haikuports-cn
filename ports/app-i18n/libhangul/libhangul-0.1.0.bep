@@ -1,0 +1,20 @@
+DESCRIPTION="a library to support hangul input method logic, hanja dictionary and small hangul character classification." 
+HOMEPAGE="http://www.kldp.net/projects/hangul/" 
+SRC_URI="http://libhangul.googlecode.com/files/libhangul-0.1.0.tar.gz"
+CHECKSUM_MD5="e9cf109772cc5fbc79f5de503ea7550a"
+REVISION="1"
+STATUS_HAIKU="stable"
+DEPEND=""
+BUILD {
+	cd libhangul-0.1.0
+	./configure --prefix=`finddir B_COMMON_DIRECTORY`
+	make
+}
+
+INSTALL {
+	cd libhangul-0.1.0
+	make install
+}
+LICENSE="GNU LGPL v2.1"
+COPYRIGHT="2002-2012 Choe Hwanjin <choe.hwanjin@gmail.com>
+			2002-2012 Joon-cheol Park <Jooncheol@gmail.com>"
