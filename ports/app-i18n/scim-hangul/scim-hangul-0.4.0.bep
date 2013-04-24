@@ -1,0 +1,22 @@
+DESCRIPTION="Hangul Input Method for Smart Common Input Method platform." 
+HOMEPAGE="http://www.scim-im.org/" 
+SRC_URI="http://sourceforge.net/projects/scim/files/scim-hangul/0.4.0/scim-hangul-0.4.0.tar.gz"
+CHECKSUM_MD5="adc4b79508d0cbc639f1146ae124df58"
+REVISION="1"
+STATUS_HAIKU="stable"
+DEPEND=""
+BUILD {
+	cd scim-hangul-0.4.0
+	./bootstrap	
+	./configure --prefix=`finddir B_COMMON_DIRECTORY`
+	make
+}
+
+INSTALL {
+	cd scim-hangul-0.4.0
+	make install
+}
+LICENSE="GNU GPL v2"
+COPYRIGHT="2002-2005 James Su <suzhe@tsinghua.org.cn>
+			2002-2012 Choe Hwanjin <choe.hwanjin@gmail.com>
+			2002-2012 liucougar <liuspider@users.sourceforge.net>"
