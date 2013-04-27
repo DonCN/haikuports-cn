@@ -1,0 +1,33 @@
+diff -Naur dbus-1.6.8/cmake/dbus/CMakeLists.txt dbus-1.6.8-haiku/cmake/dbus/CMakeLists.txt
+--- dbus-1.6.8/cmake/dbus/CMakeLists.txt	2012-09-28 19:17:25.016515072 +0000
++++ dbus-1.6.8-haiku/cmake/dbus/CMakeLists.txt	2013-04-27 00:20:30.501481472 +0000
+@@ -283,7 +283,7 @@
+ 			${DBUS_UTIL_SOURCES}
+ 			${DBUS_UTIL_HEADERS}
+ )
+-target_link_libraries(dbus-internal)
++target_link_libraries(dbus-internal network)
+ set_target_properties(dbus-internal PROPERTIES COMPILE_FLAGS ${DBUS_INTERNAL_LIBRARY_DEFINITIONS})
+ if(WIN32)
+     if(WINCE)
+diff -Naur dbus-1.6.8/dbus/sd-daemon.c dbus-1.6.8-haiku/dbus/sd-daemon.c
+--- dbus-1.6.8/dbus/sd-daemon.c	2011-07-13 20:42:21.051118080 +0000
++++ dbus-1.6.8-haiku/dbus/sd-daemon.c	2013-04-27 00:17:39.039321600 +0000
+@@ -32,7 +32,7 @@
+ #include <sys/stat.h>
+ #include <sys/socket.h>
+ #include <sys/un.h>
+-#include <sys/fcntl.h>
++#include <fcntl.h>
+ #include <netinet/in.h>
+ #include <stdlib.h>
+ #include <errno.h>
+@@ -43,6 +43,8 @@
+ 
+ #include "sd-daemon.h"
+ 
++typedef unsigned int sa_family_t;
++
+ int sd_listen_fds(int unset_environment) {
+ 
+ #if defined(DISABLE_SYSTEMD) || !defined(__linux__)

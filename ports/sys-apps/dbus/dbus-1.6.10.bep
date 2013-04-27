@@ -1,0 +1,24 @@
+DESCRIPTION="dbus message bus system" 
+HOMEPAGE="http://www.freedesktop.org/wiki/Software/dbus"
+SRC_URI="http://cgit.freedesktop.org/dbus/dbus/snapshot/dbus-1.6.10.tar.gz"
+CHECKSUM_MD5="fa8055e20cb2935e9c5959d4b7c0bf0a"
+REVISION="1"
+STATUS_HAIKU="stable"
+BUILD {
+	cd dbus-1.6.10
+	cmake ./cmake
+	make
+}
+
+INSTALL {
+	cd dbus-1.6.10
+	make install
+}
+
+TEST {
+	cd dbus-1.6.10
+	make check
+}
+
+LICENSE="GNU GPL v2"
+
