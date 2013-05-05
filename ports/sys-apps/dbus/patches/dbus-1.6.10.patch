@@ -1,7 +1,28 @@
+diff -Naur dbus-1.6.10/cmake/CMakeLists.txt dbus-1.6.10-haiku/cmake/CMakeLists.txt
+--- dbus-1.6.10/cmake/CMakeLists.txt	2013-02-12 11:45:32.056623104 +0000
++++ dbus-1.6.10-haiku/cmake/CMakeLists.txt	2013-05-05 12:24:22.968622080 +0000
+@@ -443,7 +443,7 @@
+ else (WIN32)
+   set (DBUS_SYSTEM_BUS_DEFAULT_ADDRESS "unix:tmpdir=" CACHE STRING "system bus default address")
+   set (DBUS_SESSION_BUS_DEFAULT_ADDRESS "unix:path=${DBUS_SESSION_SOCKET_DIR}" CACHE STRING "session bus default address")
+-  set (sysconfdir "")
++  set (sysconfdir "/boot/common/etc")
+   set (configdir ${sysconfdir}/dbus-1 )
+   set (DBUS_SYSTEM_CONFIG_FILE  ${configdir}/system.conf)
+   set (DBUS_SESSION_CONFIG_FILE ${configdir}/session.conf)
 diff -Naur dbus-1.6.10/cmake/dbus/CMakeLists.txt dbus-1.6.10-haiku/cmake/dbus/CMakeLists.txt
---- dbus-1.6.10/cmake/dbus/CMakeLists.txt	2013-04-24 11:14:57.012582912 +0000
-+++ dbus-1.6.10-haiku/cmake/dbus/CMakeLists.txt	2013-04-27 00:06:55.409206784 +0000
-@@ -283,7 +283,7 @@
+--- dbus-1.6.10/cmake/dbus/CMakeLists.txt	2013-04-22 14:10:32.055574528 +0000
++++ dbus-1.6.10-haiku/cmake/dbus/CMakeLists.txt	2013-05-05 12:52:52.013893632 +0000
+@@ -256,6 +256,8 @@
+ 
+ ### Client library
+ 
++find_package( network )
++
+ add_library(dbus-1 SHARED
+ 			${libdbus_SOURCES}
+ 			${libdbus_HEADERS}
+@@ -283,7 +285,7 @@
  			${DBUS_UTIL_SOURCES}
  			${DBUS_UTIL_HEADERS}
  )
@@ -10,9 +31,21 @@ diff -Naur dbus-1.6.10/cmake/dbus/CMakeLists.txt dbus-1.6.10-haiku/cmake/dbus/CM
  set_target_properties(dbus-internal PROPERTIES COMPILE_FLAGS ${DBUS_INTERNAL_LIBRARY_DEFINITIONS})
  if(WIN32)
      if(WINCE)
+diff -Naur dbus-1.6.10/configure.ac dbus-1.6.10-haiku/configure.ac
+--- dbus-1.6.10/configure.ac	2013-04-23 18:17:43.064225280 +0000
++++ dbus-1.6.10-haiku/configure.ac	2013-05-05 14:05:15.212598784 +0000
+@@ -913,7 +913,7 @@
+ 
+ # see what we have
+ AC_CHECK_LIB(expat, XML_ParserCreate_MM,
+-             [ AC_CHECK_HEADERS(expat.h, have_expat=true, have_expat=false) ],
++             have_expat=true,
+              have_expat=false)
+ 
+ # see what we want to use
 diff -Naur dbus-1.6.10/dbus/sd-daemon.c dbus-1.6.10-haiku/dbus/sd-daemon.c
---- dbus-1.6.10/dbus/sd-daemon.c	2013-04-24 11:14:57.035127296 +0000
-+++ dbus-1.6.10-haiku/dbus/sd-daemon.c	2013-04-26 23:09:27.842268672 +0000
+--- dbus-1.6.10/dbus/sd-daemon.c	2013-02-12 11:45:32.033030144 +0000
++++ dbus-1.6.10-haiku/dbus/sd-daemon.c	2013-05-05 12:14:34.881328128 +0000
 @@ -32,7 +32,7 @@
  #include <sys/stat.h>
  #include <sys/socket.h>

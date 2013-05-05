@@ -1,12 +1,16 @@
 DESCRIPTION="dbus message bus system" 
 HOMEPAGE="http://www.freedesktop.org/wiki/Software/dbus"
-SRC_URI="http://cgit.freedesktop.org/dbus/dbus/snapshot/dbus-1.6.10.tar.gz"
-CHECKSUM_MD5="fa8055e20cb2935e9c5959d4b7c0bf0a"
+SRC_URI="http://dbus.freedesktop.org/releases/dbus/dbus-1.6.10.tar.gz"
+CHECKSUM_MD5="de4970c20629aeb958a12132415b3630"
 REVISION="1"
 STATUS_HAIKU="stable"
 BUILD {
 	cd dbus-1.6.10
-	cmake ./cmake
+	autoreconf -fi
+	./configure --prefix=`finddir B_COMMON_DIRECTORY` \
+				--with-xml=expat \
+				CPPFLAGS=-I/boot/common/include \
+				LDFLAGS=-L/boot/common/lib
 	make
 }
 

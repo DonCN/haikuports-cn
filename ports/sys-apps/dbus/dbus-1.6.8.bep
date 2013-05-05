@@ -7,7 +7,11 @@ STATUS_HAIKU="stable"
 
 BUILD {
 	cd dbus-1.6.8
-	cmake ./cmake
+	autoreconf -fi
+	./configure --prefix=`finddir B_COMMON_DIRECTORY` \
+				--with-xml=expat \
+				CPPFLAGS=-I/boot/common/include \
+				LDFLAGS=-L/boot/common/lib
 	make
 }
 
